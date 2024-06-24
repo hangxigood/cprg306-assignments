@@ -1,29 +1,31 @@
 "use client";
 import React from 'react';
 import Item from './item.js';
-import items from './items.json';
 import { useState } from 'react';
 
 
-export default function ItemList() {
+export default function ItemList({items}) {
 
     const [sortBy, setSortBy] = useState('name');
     const [grouped, setGrouped] = useState(false);
 
     const sortedItems = () => {
+
+        const clonedItems = [...items];
+
         if (grouped) {
-            const categories = items.map((item) => item.category);
+            const categories = clonedItems.map((item) => item.category);
             const uniqueCategories = [...new Set(categories)];
             const groupedItems = uniqueCategories.map((category) => {
                 return {
                     category: category,
-                    items: items.filter((item) => item.category === category)
+                    items: clonedItems.filter((item) => item.category === category)
                 };
             });
             return groupedItems;
         }
         else {
-            return items.sort((a, b) => {
+            return clonedItems.sort((a, b) => {
                 if (sortBy === 'name') {
                     return a.name.localeCompare(b.name);
                 } else if (sortBy === 'category') {
