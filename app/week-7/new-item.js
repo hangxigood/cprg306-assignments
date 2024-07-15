@@ -21,7 +21,7 @@ export default function NewItem({onAddItem})
     }
     
     return (
-        <div className="flex flex-col w-1/4 bg-slate-900	p-2 m-4">
+        <div className="flex flex-col w-4/5 bg-slate-900	p-2 m-4">
             <p className="text-lg font-bold">New Item</p>
             <form className="flex flex-col p-2 m-4" onSubmit={handleSubmit}>
                 <input 

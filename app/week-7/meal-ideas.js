@@ -31,12 +31,12 @@ const MealIdeas = ({ ingredient }) => {
     // Render the component
     return (
         <div>
-            <h2>Meal Ideas for {ingredient}</h2>
-            <ul>
+            <h2 className='text-2xl font-bold'>Meal Ideas for {ingredient}</h2>
+            <ul className='mt-8 flex flex-wrap'>
                 {meals && meals.length > 0 ? (
                     meals.map(meal => (
-                        <li key={meal.idMeal}>
-                            <img src={meal.strMealThumb} alt={meal.strMeal} style={{width: '100px', height: '100px'}} />
+                        <li className='flex flex-col items-center m-5 p-5 bg-slate-900' key={meal.idMeal}>
+                            <img className="w-24 h-24 mb-4" src={meal.strMealThumb} alt={meal.strMeal}/>
                             <p>{meal.strMeal}</p>
                         </li>
                     ))
