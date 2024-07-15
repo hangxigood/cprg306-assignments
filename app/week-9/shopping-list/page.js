@@ -4,23 +4,40 @@ import { useState, useEffect } from 'react';
 import ItemList from './item-list.js';
 import NewItem from './new-item.js';
 import MealIdeas from './meal-ideas.js';  // Import the MealIdeas component
-import itemsData from './items.json';
 import { useUserAuth } from "../_utils/auth-context";
 import { useRouter } from "next/navigation";
+import { getItems, addItem, deleteItem } from "../_services/shopping-list-service.js";
 
 export default function Page() {
   const { user } = useUserAuth();
   const router = useRouter();
-  const [items, setItems] = useState(itemsData);
+  const [items, setItems] = useState([]);
   const [selectedItemName, setSelectedItemName] = useState('');
 
+  const loadItems = async (user) => {
+    const items = await getItems(user.uid);
+    setItems(items);
+  }
+
   const handleAddItem = (item) => {
+    item.id = addItem(user.uid, item);
     setItems([...items, item]);
+  };
+
+  const handleDeleteItem = async (itemId) => {
+    try {
+      await deleteItem(user.uid, itemId);
+      setItems(items.filter(item => item.id !== itemId));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
     if (!user) {
       router.push("/");
+    } else {
+      loadItems(user);
     }
   }, [user, router]);
 
@@ -41,7 +58,7 @@ export default function Page() {
       <div className='w-1/2 p-4'>
         <p className='text-2xl font-bold'>Shopping List</p>
         <NewItem onAddItem={handleAddItem} />
-        <ItemList items={items} onItemSelect={handleItemSelect} />
+        <ItemList items={items} onItemSelect={handleItemSelect} onDeleteItem={handleDeleteItem}/>
       </div>
       <div className='w-1/2 p-4'>
         <MealIdeas ingredient={selectedItemName} />
